@@ -1,9 +1,7 @@
+var sqlite3 = require('sqlite3').verbose()
 import path from 'path'
-import {
-    remote
-} from 'electron'
-var levelup = require('levelup')
-var leveldown = require('leveldown')
+import { remote } from 'electron'
 
-var leveldb = levelup(leveldown(path.join(__static, '/mydb')))
-export default leveldb
+var DB = new sqlite3.Database(path.join(remote.app.getPath('userData'), 'mysqlite.db'))
+
+export default DB

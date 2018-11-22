@@ -9,16 +9,16 @@
       </div>
       <div class="close actionBtn" @click="closeApp">
         <Tooltip content="关闭" placement="bottom">
-          <Icon type="md-close" color="rgb(255, 0, 0)" />
+          <Icon type="md-close" color="#000" />
         </Tooltip>
       </div>
     </div>
     <div id="nav">
-      <Menu mode="vertical" :active-name="activeName" @on-select="navclick" width="140px" accordion>
-        <MenuItem name="/"><Icon type="logo-codepen"/>项目信息</MenuItem>
-        <MenuItem name="/workers"><Icon type="ios-people"/>人员管理</MenuItem>
-        <MenuItem name="/machine"><Icon type="ios-radio"/>设备管理</MenuItem>
-        <MenuItem name="/works"><Icon type="ios-man"/>考勤管理</MenuItem>
+      <Menu mode="vertical" :active-name="activeName" @on-select="navclick" width="100px" accordion>
+        <MenuItem name="/">项目信息</MenuItem>
+        <MenuItem name="/workers">人员管理</MenuItem>
+        <MenuItem name="/machine">设备管理</MenuItem>
+        <MenuItem name="/works">考勤管理</MenuItem>
       </Menu>
     </div>
     <transition>
@@ -73,12 +73,12 @@
 
   .wrapper {
     padding: 0;
-    margin: 100px auto 0 200px;
+    margin: 50px auto 0 120px;
   }
 
   #topbar {
     width: 100%;
-    background: #f8f8f9;
+    background: #fafbfc;
     padding: 0;
     position: fixed;
     top: 0px;
@@ -87,17 +87,19 @@
     line-height: 2.5em;
     text-align: center;
     font-size: 12px;
+    font-weight: 600;
     -webkit-app-region: drag;
     -webkit-user-select: none;
+    border-bottom: 1px solid #e8eaec;
   }
 
   #nav {
-    width: 140px;
+    width: 100px;
     height: 100vw;
     background: #fff;
     padding: 0;
     position: fixed;
-    top: 30px;
+    top: 32px;
     left: 0;
     border-right: 1px solid #e8eaec;
   }
@@ -137,6 +139,15 @@
 
   .ivu-menu-item {
     font-size: 12px !important;
+  }
+
+  .ivu-modal-mask {
+    background-color: rgba(255, 255, 255, 0.911) !important;
+  }
+
+  .ivu-modal-content {
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.151);
+    margin-bottom: 30px;
   }
 
   ::-webkit-scrollbar {

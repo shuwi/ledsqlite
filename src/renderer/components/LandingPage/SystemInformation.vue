@@ -1,39 +1,24 @@
 <template>
-  <div>
-    <div class="title">Information</div>
-    <div class="items">
-      <div class="item">
-        <div class="name">Path:</div>
-        <div class="value">{{ path }}</div>
-      </div>
-      <div class="item">
-        <div class="name">Route Name:</div>
-        <div class="value">{{ name }}</div>
-      </div>
-      <div class="item">
-        <div class="name">Vue.js:</div>
-        <div class="value">{{ vue }}</div>
-      </div>
-      <div class="item">
-        <div class="name">Electron:</div>
-        <div class="value">{{ electron }}</div>
-      </div>
-      <div class="item">
-        <div class="name">Node:</div>
-        <div class="value">{{ node }}</div>
-      </div>
-      <div class="item">
-        <div class="name">Platform:</div>
-        <div class="value">{{ platform }}</div>
-      </div>
-    </div>
+  <div class="sysinfo">
+    <Card title="系统信息" icon="ios-options" dis-hover>
+      <CellGroup>
+        <Cell title="APP" :label="app" />
+        <Cell title="路径" :label="path" />
+        <Cell title="组件名称" :label="name" />
+        <Cell title="Vue.js" :label="vue" />
+        <Cell title="Electron" :label="electron" />
+        <Cell title="Node.js" :label="node" />
+        <Cell title="平台" :label="platform" />
+      </CellGroup>
+    </Card>
   </div>
 </template>
 
 <script>
   export default {
-    data () {
+    data() {
       return {
+        app: require('electron').remote.app.getLocale(),
         electron: process.versions.electron,
         name: this.$route.name,
         node: process.versions.node,
@@ -46,28 +31,10 @@
 </script>
 
 <style scoped>
-  .title {
-    color: #888;
-    font-size: 18px;
-    font-weight: initial;
-    letter-spacing: .25px;
-    margin-top: 10px;
-  }
-
-  .items { margin-top: 8px; }
-
-  .item {
-    display: flex;
-    margin-bottom: 6px;
-  }
-
-  .item .name {
-    color: #6a6a6a;
-    margin-right: 6px;
-  }
-
-  .item .value {
-    color: #35495e;
-    font-weight: bold;
+  .sysinfo {
+    padding: 10px;
+    background: #fafbfc;
+    width: 400px;
+    margin: 20px 0;
   }
 </style>

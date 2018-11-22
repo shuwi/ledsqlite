@@ -6,7 +6,6 @@ import router from './router'
 import store from './store'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
-
 import leveldb from './store/db'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
@@ -16,7 +15,9 @@ Vue.config.productionTip = false
 Vue.use(iView)
 
 new Vue({
-  components: { App },
+  components: {
+    App
+  },
   router,
   store,
   template: '<App/>'

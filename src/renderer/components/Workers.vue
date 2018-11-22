@@ -2,9 +2,6 @@
   <div class="wrapper">
     <main>
       <div class="left-side">
-        <span class="title">
-          工人信息
-        </span>
         <system-information></system-information>
       </div>
     </main>
