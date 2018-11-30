@@ -14,6 +14,8 @@ npm run dev
 # build electron application for production
 npm run build
 
+# node-gyp
+node-gyp rebuild --target=2.0.12 --arch=ia32 --target_platform=win32 --dist-url=https://atom.io/download/electron/ --module_name=better_sqlite3 --module_path=../lib/binding/electron-v2.0-win32-x86
 
 ```
 
