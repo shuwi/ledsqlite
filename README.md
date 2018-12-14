@@ -5,8 +5,12 @@
 #### Build Setup
 
 ``` bash
+# set npm's 'python' config key to the appropriate value
+npm config set python C:\Python27
+
 # install dependencies
 npm install
+.\node_modules\.bin\electron-rebuild.cmd
 
 # serve with hot reload at localhost:9080
 npm run dev

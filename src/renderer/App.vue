@@ -1,24 +1,21 @@
 <template>
   <div id="app">
-    <div id="topbar">考勤管理系统</div>
+    <div id="topbar">人员信息录入</div>
     <div class="actionBtn-container">
       <div class="minimize actionBtn" @click="minimize">
         <Tooltip content="最小化" placement="bottom">
-          <Icon type="md-remove" color="#000" />
+          <span class="iicon md-remove" color="#000"></span>
         </Tooltip>
       </div>
       <div class="close actionBtn" @click="closeApp">
         <Tooltip content="关闭" placement="bottom">
-          <Icon type="md-close" color="#000" />
+          <span class="iicon md-close" color="#000"></span>
         </Tooltip>
       </div>
     </div>
     <div id="nav">
       <Menu mode="vertical" :active-name="activeName" @on-select="navclick" width="100px" accordion>
-        <MenuItem name="/">项目信息</MenuItem>
-        <MenuItem name="/workers">人员管理</MenuItem>
-        <MenuItem name="/machine">设备管理</MenuItem>
-        <MenuItem name="/works">考勤管理</MenuItem>
+        <MenuItem name="/">人员信息</MenuItem>
       </Menu>
     </div>
     <transition>
@@ -116,8 +113,8 @@
   .actionBtn {
     -webkit-app-region: no-drag;
     font-size: 16px;
-    width: 25px;
-    height: 40px;
+    width: 20px;
+    height: 20px;
     text-align: center;
     -webkit-transition: all .3s;
     transition: all .3s;
@@ -142,12 +139,17 @@
   }
 
   .ivu-modal-mask {
-    background-color: rgba(255, 255, 255, 0.911) !important;
+    background-color: rgb(255, 255, 255) !important;
   }
 
   .ivu-modal-content {
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.151);
     margin-bottom: 30px;
+    border: 1px solid rgba(27, 31, 35, 0.123) !important;
+    box-shadow: 0 0 25px 6px rgba(31, 51, 73, .1) !important;
+  }
+
+  .ivu-menu-vertical .ivu-menu-item, .ivu-menu-vertical .ivu-menu-submenu-title {
+    padding: 8px 24px !important;
   }
 
   ::-webkit-scrollbar {
@@ -166,5 +168,19 @@
     border-radius: 10px;
     -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     background: #797979;
+  }
+
+  .iicon{
+    display: block;
+    height: 12px;
+    width: 12px;
+    margin: 8px 0 0 0;
+    border-radius: 12px;
+    background: green;
+  }
+
+  .md-close{
+    background: red;
+    margin: 8px 6px 0 0;
   }
 </style>

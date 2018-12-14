@@ -9,11 +9,6 @@ export default new Router({
       path: '/',
       name: 'landing-page',
       component: require('@/components/LandingPage').default
-    },
-    {
-      path: '/workers',
-      name: 'workers',
-      component: require('@/components/Workers').default
     }
   ]
 })

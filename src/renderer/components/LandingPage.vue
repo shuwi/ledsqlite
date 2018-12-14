@@ -2,132 +2,214 @@
   <div class="wrapper">
     <main>
       <div class="left-side">
-        <system-information></system-information>
-        <Button shape="circle" @click="test" icon="ios-cube">LEVELDB</Button>
-        <Button shape="circle" @click="http" icon="ios-flash-outline">HTTP</Button>
-        <Button shape="circle" @click="sqlite" icon="ios-flash-outline">SQLITE</Button>
+        <worker @reloadPage="userlistChange(1)"></worker>
+        <div class="opttop">
+          <Button shape="circle" icon="md-add" class="btn" type="primary" @click="showUserModal" v-if="canAddUser">添加人员</Button>
+          <Input placeholder="请输入姓名或身份证号、手机号后查询" style="width:300px;margin:0 10px 0 0;" clearable v-model="keyword" />
+          <Button shape="circle" icon="md-search" class="btn" @click="search">查询</Button>
+        </div>
+        <div class="optcontent">
+          <Table border size="small" ref="selection" :columns="workerscol" :data="workersdata"></Table>
+        </div>
+        <div class="optbt">
+          <Page :current="current" :total="total" show-total style="float:right;" @on-change="userlistChange"
+            :page-size="pagesize" />
+        </div>
       </div>
     </main>
   </div>
 </template>
 
 <script>
-  import SystemInformation from './LandingPage/SystemInformation'
+  import Worker from './LandingPage/Worker'
 
   export default {
     name: 'landing-page',
     components: {
-      SystemInformation
+      Worker
+    },
+    data() {
+      return {
+        canAddUser: true,
+        current: 1,
+        total: 0,
+        pagesize: 10,
+        keyword: '',
+        workerscol: [{
+            title: '姓名',
+            key: 'name',
+            render: (h, params) => {
+              return h('div', [
+                h('Icon', {
+                  props: {
+                    type: 'md-person'
+                  }
+                }),
+                h('strong', params.row.name)
+              ]);
+            }
+          },
+          {
+            title: '身份证号',
+            key: 'userId'
+          },
+          {
+            title: '出生日期',
+            key: 'birthday'
+          },
+          {
+            title: '手机号',
+            key: 'mobile'
+          },
+          {
+            title: '家庭住址',
+            key: 'homeAddress'
+          }
+        ],
+        workersdata: []
+      }
     },
     methods: {
-      open(link) {
-        this.$electron.shell.openExternal(link)
-      },
-      test() {
+      userlistChange(number) {
         var that = this
-        that.$leveldb.put('name', new Date(), function (err) {
-          if (err) return that.$Notice.error({
-            title: '写入错误',
-            desc: err
+        that.$workersRepo.createTable().then(() => {
+          that.$workersRepo.getWorkersCount(that.keyword).then((data) => {
+            that.total = data.num
+          }).then(() => that.$workersRepo.getWorkers(that.keyword, number, that.pagesize)).then((userlist) => {
+            that.workersdata = userlist
+          }).catch((err) => {
+            
           })
-        })
-
-        that.$leveldb.get('name', function (err, value) {
-          if (err) return that.$Notice.error({
-            title: '读取错误',
-            desc: err
-          })
-          that.$Notice.success({
-            title: '结果',
-            desc: value
-          })
-
+        }).catch((err) => {
+          
         })
       },
-      http() {
-
-        this.$http({
-            url: '/v3/weather/weatherInfo',
-            baseURL: 'https://restapi.amap.com/',
-            method: 'get',
-            params: {
-              key: '0a73c5c6be50f0a6dcebcaf3f7eaa2e0',
-              extensions: 'all',
-              city: '320600'
-            },
-          })
-          .then(function (response) {
-            console.log(response)
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
+      search() {
+        var that = this
+        var k = that.keyword
+        that.$workersRepo.getWorkersCount(k).then((data) => {
+          that.total = data.num
+        }).then(() => that.$workersRepo.getWorkers(k, 1, that.pagesize)).then((userlist) => {
+          that.workersdata = userlist
+        }).catch((err) => {
+          
+        })
       },
-      sqlite() {
-        var db = this.$leveldb
-        db.serialize(function () {
-          db.run("CREATE TABLE if not exists lorem (info TEXT)");
-          db.run(
-            "CREATE TABLE IF NOT EXISTS `worker` (\
-              `userId` varchar(255) NOT NULL,\
-              `name` varchar(255) NOT NULL,\
-              `mobile` varchar(255) NOT NULL,\
-              `job` varchar(255) DEFAULT NULL,\
-              `groupname` varchar(255) DEFAULT NULL,\
-              `addtime` varchar(255) DEFAULT NULL,\
-              `checkinState` int(2) NOT NULL DEFAULT 0,\
-              `checkinTime` datetime DEFAULT NULL,\
-              `photo` longtext NOT NULL,\
-              `projectId` int(11) NOT NULL,\
-              `workDate` date DEFAULT NULL,\
-              `urgentContractCellphone` varchar(255) DEFAULT NULL,\
-              `urgentContractName` varchar(255) DEFAULT NULL,\
-              `noBadMedicalHistory` varchar(1) DEFAULT 0,\
-              `cultureLevelType` varchar(255) DEFAULT NULL,\
-              `joinedTime` date DEFAULT NULL,\
-              `unJoined` varchar(1) DEFAULT 0,\
-              `politicsType` varchar(255) DEFAULT NULL,\
-              `birthPlaceCode` varchar(255) DEFAULT NULL,\
-              `nation` varchar(255) DEFAULT NULL,\
-              `idCardType` int(255) DEFAULT NULL,\
-              `classNo` varchar(255) DEFAULT NULL,\
-              `personType` varchar(255) DEFAULT NULL,\
-              `homeAddress` varchar(255) DEFAULT NULL,\
-              `workKind` int(6) DEFAULT NULL,\
-              `birthday` varchar(255) DEFAULT NULL,\
-              `gender` varchar(1) DEFAULT NULL ,\
-              `ptype` varchar(1) DEFAULT NULL,\
-              `currentAddresss` varchar(255) DEFAULT NULL,\
-              `workAccommodationType` varchar(1) DEFAULT 0,\
-              `workKindType` varchar(1) DEFAULT '1',\
-              `beginnew` varchar(255) DEFAULT NULL,\
-              `endnew` varchar(255) DEFAULT NULL,\
-              `uploaded` int(2) DEFAULT 0\
-            )"
-          )
-
-          var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
-          for (var i = 0; i < 10; i++) {
-            stmt.run("Ipsum " + i + (new Date()).toLocaleDateString());
-          }
-          stmt.finalize();
-
-          db.each("SELECT rowid AS id, info FROM lorem", function (err, row) {
-            console.log(row.id + ": " + row.info);
-          });
-        });
-
-        //db.close();
+      showUserModal() {
+        this.$store.dispatch('showNewBoardModal', {
+          id: 0
+        })
       }
     },
-    dataDeal(objects) {
-      for (var i = 0; i < objects.length; ++i) {
-        console.log(objects[i]);
-      }
+    created() {
+      this.userlistChange(1)
+      var that = this
+      that.$http({
+          baseURL: that.$store.state.modals.login.baseURL,
+          url: '/login',
+          data: {
+            userName: 'cardReader',
+            password: 'xywg'
+          },
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(function (data) {
+          if (data.data.code === '200') {
+            that.$store.dispatch('setToken', data.data.token)
+
+            that.$http({
+                baseURL: that.$store.state.modals.login.baseURL,
+                url: '/getIdCardType',
+                data: {
+                  key: '人员证件类型'
+                },
+                method: 'post',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'token': data.data.token
+                }
+              })
+              .then(function (res) {
+                that.$store.dispatch('setIdCardType', res.data)
+              })
+              .catch(function (error) {
+                
+              })
+              .finally(() => {
+                
+              })
+
+              //工种字典数据
+              that.$http({
+                baseURL: that.$store.state.modals.login.baseURL,
+                url: '/getIdCardType',
+                data: {
+                  key: '工种字典数据'
+                },
+                method: 'post',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'token': data.data.token
+                }
+              })
+              .then(function (res) {
+                that.$store.dispatch('setWorkKind', res.data)
+              })
+              .catch(function (error) {
+                
+              })
+              .finally(() => {
+                
+              })
+
+              that.$http({
+                baseURL: that.$store.state.modals.login.baseURL,
+                url: '/getIdCardType',
+                data: {
+                  key: '文化程度'
+                },
+                method: 'post',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'token': data.data.token
+                }
+              })
+              .then(function (res) {
+                that.$store.dispatch('setCultureLevel', res.data)
+              })
+              .catch(function (error) {
+                
+              })
+              .finally(() => {
+                
+              })
+          }
+        })
+        .catch(function (error) {
+          
+        })
+        .finally(() => {
+          
+        })
     }
   }
 </script>
-
 <style>
+  .opttop {
+    margin: 0 auto 20px auto;
+    width: 96%;
+  }
 
+  .optcontent {
+    margin: 20px auto;
+    width: 96%;
+  }
+
+  .optbt {
+    margin: 20px auto;
+    width: 96%;
+  }
 </style>

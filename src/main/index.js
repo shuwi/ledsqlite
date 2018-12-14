@@ -21,9 +21,9 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 600,
+    height: 700,
     useContentSize: true,
-    width: 1100,
+    width: 1200,
     frame: false,
     webPreferences: {
       webSecurity: false
@@ -31,7 +31,7 @@ function createWindow() {
   })
 
   mainWindow.loadURL(winURL)
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', () => {
     mainWindow = null
