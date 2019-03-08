@@ -10,7 +10,7 @@ npm config set python C:\Python27
 
 # install dependencies
 npm install
-.\node_modules\.bin\electron-rebuild.cmd --dist-url=http://atom.io/download/electron
+.\node_modules\.bin\electron-rebuild.cmd --dist-url=http://atom.io/download/electron --version=2.0.4
 
 # serve with hot reload at localhost:9080
 npm run dev
